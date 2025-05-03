@@ -1,0 +1,120 @@
+// src/lib/api.ts
+import axios from "axios"
+import {
+	Product,
+	Category,
+	ProductImage,
+	ApiResponse,
+	ProductRequest,
+	LoginRequest,
+	LoginResponse,
+	RegisterRequest,
+	RefreshTokenResponse,
+	ProductQueryParams,
+} from "@/types/api"
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
+
+// Create a base axios instance
+const api = axios.create({
+	baseURL: API_URL,
+	headers: {
+		"Content-Type": "application/json",
+	},
+})
+
+// Add a request interceptor to include auth token
+api.interceptors.request.use(
+	async (config) => {
+		// For browser environments only
+		if (typeof window !== "undefined") {
+			const token = localStorage.getItem("token")
+			if (token) {
+				config.headers.Authorization = `Bearer ${token}`
+			}
+		}
+		return config
+	},
+	(error) => Promise.reject(error),
+)
+
+// Add a response interceptor to handle response
+api.interceptors.response.use(
+	(response) => {
+		return response.data
+	},
+	(error) => {
+		console.error("API Error:", error)
+		return Promise.reject(error)
+	},
+)
+
+export const productAPI = {
+	getAll: (params?: ProductQueryParams): Promise<ApiResponse<Product[]>> => {
+		// Memastikan category_id dikirim sebagai string
+		const queryParams = {
+			...params,
+			category_id: params?.category_id ? String(params.category_id) : undefined,
+		}
+		return api.get("/product", { params: queryParams })
+	},
+
+	getById: (id: string): Promise<ApiResponse<Product>> =>
+		api.get(`/product/${id}`),
+
+	getBySlug: (slug: string): Promise<ApiResponse<Product>> =>
+		api.get(`/product/slug/${slug}`),
+
+	getByCategory: (
+		categoryId: string,
+		params?: {
+			page?: number
+			limit?: number
+			sort?: string
+			search?: string
+		},
+	): Promise<ApiResponse<Product[]>> => {
+		return api.get(`/product/category/${categoryId}`, { params })
+	},
+
+	create: (productData: FormData): Promise<ApiResponse<Product>> =>
+		api.post("/product", productData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}),
+
+	update: (id: string, productData: FormData): Promise<ApiResponse<Product>> =>
+		api.patch(`/product/${id}`, productData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}),
+
+	delete: (id: string): Promise<ApiResponse<void>> =>
+		api.delete(`/product/${id}`),
+}
+
+export const categoryAPI = {
+	getAll: (params?: {
+		page?: number
+		limit?: number
+		sort?: string
+		search?: string
+	}): Promise<ApiResponse<Category[]>> => api.get("/category", { params }),
+
+	getById: (id: string): Promise<ApiResponse<Category>> =>
+		api.get(`/category/${id}`),
+
+	getBySlug: (slug: string): Promise<ApiResponse<Category>> =>
+		api.get(`/category/slug/${slug}`),
+
+	create: (categoryData: any): Promise<ApiResponse<Category>> =>
+		api.post("/category", categoryData),
+
+	update: (id: string, categoryData: any): Promise<ApiResponse<Category>> =>
+		api.patch(`/category/${id}`, categoryData),
+
+	delete: (id: string): Promise<ApiResponse<void>> =>
+		api.delete(`/category/${id}`),
+}
