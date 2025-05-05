@@ -19,7 +19,7 @@ type PageProps = {
 	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-async function getCategory(slug: string): Promise<Category | null> {
+async function getCategory(slug: string) {
 	try {
 		const response = await categoryAPI.getBySlug(slug)
 		return response.data
