@@ -14,15 +14,9 @@ import {
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 
-interface CategoryPageProps {
-	params: {
-		slug: string
-	}
-	searchParams: {
-		page?: string
-		sort?: string
-		search?: string
-	}
+type Props = {
+	params: { slug: string }
+	searchParams: { [key: string]: string | string[] | undefined }
 }
 
 async function getCategory(slug: string): Promise<Category> {
@@ -68,13 +62,7 @@ async function getProducts(
 	}
 }
 
-export default async function CategoryPage({
-	params,
-	searchParams,
-}: {
-	params: { slug: string }
-	searchParams: { page?: string; sort?: string; search?: string }
-}) {
+export default async function CategoryPage({ params, searchParams }: Props) {
 	let category: Category
 
 	try {
@@ -83,9 +71,18 @@ export default async function CategoryPage({
 		notFound()
 	}
 
-	const page = Number(searchParams.page) || 1
-	const sort = searchParams.sort
-	const search = searchParams.search
+	const page =
+		Number(
+			Array.isArray(searchParams.page)
+				? searchParams.page[0]
+				: searchParams.page,
+		) || 1
+	const sort = Array.isArray(searchParams.sort)
+		? searchParams.sort[0]
+		: searchParams.sort
+	const search = Array.isArray(searchParams.search)
+		? searchParams.search[0]
+		: searchParams.search
 
 	const {
 		data: products,
