@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
 	ShoppingBag,
 	ArrowRight,
@@ -99,9 +99,11 @@ function ProductsError({ error }: { error: Error }) {
 	)
 }
 
-export default function ProductsPage() {
+// This component handles search params
+function ProductsContent() {
 	const router = useRouter()
-	const searchParams = useSearchParams()
+	// useSearchParams is now used inside a component wrapped by Suspense
+	const searchParams = new URLSearchParams(window.location.search)
 	const [isLoading, setIsLoading] = useState(true)
 	const [products, setProducts] = useState<Product[]>([])
 	const [categories, setCategories] = useState<Category[]>([])
@@ -369,5 +371,20 @@ export default function ProductsPage() {
 				</div>
 			</div>
 		</div>
+	)
+}
+
+// Main component with Suspense boundary
+export default function ProductsPage() {
+	return (
+		<Suspense
+			fallback={
+				<div className="container mx-auto px-4 py-8 text-center">
+					Loading...
+				</div>
+			}
+		>
+			<ProductsContent />
+		</Suspense>
 	)
 }

@@ -2,7 +2,7 @@ import NextAuth, { AuthOptions, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import axios from "axios"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const authOptions: AuthOptions = {
 	providers: [
