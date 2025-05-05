@@ -71,7 +71,10 @@ async function getProducts(
 export default async function CategoryPage({
 	params,
 	searchParams,
-}: CategoryPageProps) {
+}: {
+	params: { slug: string }
+	searchParams: { page?: string; sort?: string; search?: string }
+}) {
 	let category: Category
 
 	try {

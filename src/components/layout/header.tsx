@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import {
@@ -79,12 +80,16 @@ const Header = () => {
 					{/* Logo */}
 					<Link
 						href="/"
-						className="flex items-center gap-2 text-2xl font-bold"
+						className="flex items-center"
 						onClick={() => setIsMenuOpen(false)}
 					>
-						<span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-							DRT-Store
-						</span>
+						<Image
+							src="/logo.png"
+							alt="DRT-Store Logo"
+							width={150}
+							height={150}
+							className="object-contain"
+						/>
 					</Link>
 
 					{/* Desktop Navigation */}
