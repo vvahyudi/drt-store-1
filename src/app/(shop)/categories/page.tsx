@@ -150,7 +150,7 @@ export default function CategoriesPage() {
 				<div className="w-full lg:w-80 shrink-0">
 					<div className="bg-white rounded-lg border p-6 shadow-sm sticky top-4">
 						<h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-							<span>Categories</span>
+							<span>Kategori</span>
 							<Badge variant="secondary" className="px-2 py-1 text-xs">
 								{categories.length}
 							</Badge>

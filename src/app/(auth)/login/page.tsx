@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { useMutation } from "@tanstack/react-query"
+import { authAPI } from "@/lib/api"
 
 // Define form schema
 const loginSchema = z.object({
@@ -37,24 +39,26 @@ export default function LoginPage() {
 
 	const onSubmit = async (data: LoginFormValues) => {
 		setIsLoading(true)
-
 		try {
 			const result = await signIn("credentials", {
 				username: data.username,
 				password: data.password,
 				redirect: false,
+				callbackUrl: "/admin/dashboard",
 			})
 
 			if (result?.error) {
 				toast.error("Login failed. Please check your credentials.")
+			} else if (result?.url) {
+				toast.success("Login successful!")
+				router.replace(result.url)
 			} else {
 				toast.success("Login successful!")
-				router.push("/")
-				router.refresh()
+				router.replace("/admin/dashboard")
 			}
 		} catch (error) {
-			toast.error("An unexpected error occurred")
-			console.error("Login error:", error)
+			console.error("Login exception:", error)
+			toast.error("An error occurred during login")
 		} finally {
 			setIsLoading(false)
 		}

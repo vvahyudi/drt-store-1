@@ -1,36 +1,270 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DRT Store
 
-## Getting Started
+DRT Store adalah aplikasi e-commerce modern yang dibangun dengan Next.js 14, TypeScript, dan Tailwind CSS.
 
-First, run the development server:
+## 🚀 Fitur
+
+- 🔐 Autentikasi dengan NextAuth.js
+- 🛍️ Manajemen Produk
+- 📦 Manajemen Kategori
+- 🛒 Keranjang Belanja
+- 📝 Manajemen Pesanan
+- 📱 Responsive Design
+- 🎨 UI Modern dengan Tailwind CSS
+- 🔄 State Management dengan React Query
+
+## 🛠️ Teknologi
+
+- **Frontend:**
+
+  - Next.js 14
+  - TypeScript
+  - Tailwind CSS
+  - React Query
+  - NextAuth.js
+  - Shadcn UI
+  - Lucide Icons
+
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB
+  - JWT Authentication
+
+## 📦 Instalasi
+
+1. Clone repository:
+
+```bash
+git clone https://github.com/yourusername/drt-store.git
+cd drt-store
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# atau
+yarn install
+```
+
+3. Setup environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+4. Jalankan development server:
 
 ```bash
 npm run dev
-# or
+# atau
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔑 Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5001/api
+NEXTAUTH_SECRET=your-secret-key
+NEXTAUTH_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📡 API Endpoints
 
-## Learn More
+### Authentication
 
-To learn more about Next.js, take a look at the following resources:
+```typescript
+POST / api / auth / login
+Body: {
+	username: string
+	password: string
+}
+Response: {
+	data: {
+		id: string
+		name: string
+		email: string
+		token: string
+	}
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Products
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```typescript
+GET /api/products
+Query Parameters:
+  - page: number
+  - limit: number
+  - search: string
+  - category: string
+  - sort: string
+Response: {
+  data: Product[]
+  total: number
+  page: number
+  limit: number
+}
 
-## Deploy on Vercel
+GET /api/products/:id
+Response: {
+  data: Product
+}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+POST /api/products
+Body: {
+  name: string
+  description: string
+  price: number
+  stock: number
+  categoryId: string
+  images: string[]
+}
+Response: {
+  data: Product
+}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+PUT /api/products/:id
+Body: {
+  name?: string
+  description?: string
+  price?: number
+  stock?: number
+  categoryId?: string
+  images?: string[]
+}
+Response: {
+  data: Product
+}
+
+DELETE /api/products/:id
+Response: {
+  message: string
+}
+```
+
+### Categories
+
+```typescript
+GET /api/categories
+Query Parameters:
+  - page: number
+  - limit: number
+  - search: string
+Response: {
+  data: Category[]
+  total: number
+  page: number
+  limit: number
+}
+
+GET /api/categories/:id
+Response: {
+  data: Category
+}
+
+POST /api/categories
+Body: {
+  name: string
+  description: string
+}
+Response: {
+  data: Category
+}
+
+PUT /api/categories/:id
+Body: {
+  name?: string
+  description?: string
+}
+Response: {
+  data: Category
+}
+
+DELETE /api/categories/:id
+Response: {
+  message: string
+}
+```
+
+### Orders
+
+```typescript
+GET /api/orders
+Query Parameters:
+  - page: number
+  - limit: number
+  - status: string
+Response: {
+  data: Order[]
+  total: number
+  page: number
+  limit: number
+}
+
+GET /api/orders/:id
+Response: {
+  data: Order
+}
+
+POST /api/orders
+Body: {
+  items: {
+    productId: string
+    quantity: number
+  }[]
+  shippingAddress: {
+    address: string
+    city: string
+    postalCode: string
+    country: string
+  }
+}
+Response: {
+  data: Order
+}
+
+PUT /api/orders/:id/status
+Body: {
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+}
+Response: {
+  data: Order
+}
+```
+
+## 📁 Struktur Proyek
+
+```
+src/
+├── app/                    # App router pages
+│   ├── (admin)/           # Admin routes
+│   ├── (auth)/            # Auth routes
+│   └── api/               # API routes
+├── components/            # React components
+│   ├── ui/               # UI components
+│   └── layout/           # Layout components
+├── hooks/                # Custom hooks
+├── lib/                  # Utility functions
+├── types/                # TypeScript types
+└── styles/              # Global styles
+```
+
+## 👥 Kontribusi
+
+1. Fork repository
+2. Buat branch fitur (`git checkout -b feature/amazing-feature`)
+3. Commit perubahan (`git commit -m 'Add some amazing feature'`)
+4. Push ke branch (`git push origin feature/amazing-feature`)
+5. Buat Pull Request
+
+## 📝 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+## 🤝 Kontak
+
+Ahmad - [@yourusername](https://twitter.com/yourusername)
+
+Project Link: [https://github.com/yourusername/drt-store](https://github.com/yourusername/drt-store)

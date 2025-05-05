@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 // Components
+import Header from "@/components/layout/header"
 import HeroSection from "@/components/sections/hero-section"
 // import CategoryShowcase from "@/components/sections/category-showcase"
 import ProductCard from "@/components/products/product-card"
@@ -62,6 +63,7 @@ export default async function HomePage() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
+			<Header />
 			{/* Hero Section */}
 			<HeroSection
 				title="Temukan Produk Berkualitas untuk"

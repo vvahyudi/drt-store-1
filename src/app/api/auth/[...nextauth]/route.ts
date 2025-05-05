@@ -1,87 +1,75 @@
-import NextAuth from "next-auth"
+import NextAuth, { AuthOptions, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { authAPI } from "@/lib/api"
+import axios from "axios"
 
-const handler = NextAuth({
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
+
+const authOptions: AuthOptions = {
 	providers: [
 		CredentialsProvider({
-			name: "Credentials",
+			name: "Credential",
 			credentials: {
-				username: { label: "Username", type: "text" },
-				password: { label: "Password", type: "password" },
+				username: {
+					label: "username",
+					type: "username",
+					placeholder: "Enter username...",
+				},
+				password: {
+					label: "Password",
+					type: "password",
+					placeholder: "Enter Password...",
+				},
 			},
 			async authorize(credentials) {
-				if (!credentials?.username || !credentials?.password) {
-					throw new Error("Username and password are required")
-				}
+				if (!credentials?.username || !credentials?.password) return null
 
 				try {
-					const response = await authAPI.login(
-						credentials.username,
-						credentials.password,
-					)
+					const response = await axios.post(`${API_URL}/auth/login`, {
+						username: credentials.username,
+						password: credentials.password,
+					})
 
-					if (response.status === 200 && response.data) {
+					if (response.data.data) {
 						return {
-							id: response.data.username, // Using username as ID since backend doesn't provide user ID
-							name: response.data.username,
-							accessToken: response.data.access_token,
-							refreshToken: response.data.refresh_token,
-						}
+							id: response.data.data.id,
+							name: response.data.data.name || "",
+							email: response.data.data.email || "",
+							accessToken: response.data.data.token,
+						} as User
 					}
-					throw new Error("Invalid credentials")
-				} catch (error: any) {
-					console.error("Login error:", error)
-					throw new Error(
-						error.response?.data?.message || "Authentication failed",
-					)
+					return null
+				} catch (error) {
+					return null
 				}
 			},
 		}),
 	],
-	pages: {
-		signIn: "/login",
-		error: "/login",
+	session: {
+		strategy: "jwt",
+		maxAge: 30 * 24 * 60 * 60, // 30 days
 	},
 	callbacks: {
-		async jwt({ token, user, trigger }) {
+		async jwt({ token, user }) {
 			if (user) {
 				token.id = user.id
-				token.accessToken = user.accessToken
-				token.refreshToken = user.refreshToken
+				token.accessToken = (user as any).accessToken
 			}
-
-			// Handle token refresh
-			if (trigger === "update" && token.refreshToken) {
-				try {
-					const response = await authAPI.refreshToken(
-						token.refreshToken as string,
-					)
-					if (response.status === 200 && response.data) {
-						token.accessToken = response.data.access_token
-						token.refreshToken = response.data.refresh_token
-					}
-				} catch (error) {
-					console.error("Token refresh error:", error)
-				}
-			}
-
 			return token
 		},
 		async session({ session, token }) {
-			if (session.user) {
+			if (token) {
 				session.user.id = token.id as string
 				session.user.accessToken = token.accessToken as string
-				session.user.refreshToken = token.refreshToken as string
 			}
 			return session
 		},
 	},
-	session: {
-		strategy: "jwt",
-		maxAge: 60 * 60, // 1 hour
+	pages: {
+		signIn: "/login",
+		error: "/login",
 	},
-	debug: process.env.NODE_ENV === "development",
-})
+	secret: process.env.NEXTAUTH_SECRET,
+}
 
+const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }

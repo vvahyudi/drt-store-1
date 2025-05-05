@@ -118,3 +118,46 @@ export const categoryAPI = {
 	delete: (id: string): Promise<ApiResponse<void>> =>
 		api.delete(`/category/${id}`),
 }
+
+export const authAPI = {
+	login: async (body: LoginRequest): Promise<ApiResponse<LoginResponse>> => {
+		try {
+			const response = await api.post<ApiResponse<LoginResponse>>(
+				"/auth/login",
+				body,
+			)
+			return response.data
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				throw new Error(error.response?.data?.message || error.message)
+			}
+			throw error
+		}
+	},
+
+	register: async (body: RegisterRequest): Promise<ApiResponse<void>> => {
+		try {
+			const response = await api.post<ApiResponse<void>>("/auth/register", body)
+			return response.data
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				throw new Error(error.response?.data?.message || error.message)
+			}
+			throw error
+		}
+	},
+
+	refreshToken: async (): Promise<ApiResponse<RefreshTokenResponse>> => {
+		try {
+			const response = await api.post<ApiResponse<RefreshTokenResponse>>(
+				"/auth/refresh",
+			)
+			return response.data
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				throw new Error(error.response?.data?.message || error.message)
+			}
+			throw error
+		}
+	},
+}

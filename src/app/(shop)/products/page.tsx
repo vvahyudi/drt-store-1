@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select"
 import { Suspense, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
+import { Badge } from "@/components/ui/badge"
 
 async function getProducts(params: {
 	page?: number
@@ -174,6 +175,14 @@ export default function ProductsPage() {
 		router.push(`/products?${params.toString()}`)
 	}
 
+	const handleCategoryClick = (selectedCategoryId?: string) => {
+		const params = new URLSearchParams()
+		if (selectedCategoryId) params.set("category_id", selectedCategoryId)
+		if (search) params.set("search", search)
+		if (sort) params.set("sort", sort)
+		router.push(`/products?${params.toString()}`)
+	}
+
 	const sortOptions = [
 		{ value: "price.asc", label: "Harga Terendah" },
 		{ value: "price.desc", label: "Harga Tertinggi" },
@@ -207,63 +216,59 @@ export default function ProductsPage() {
 				{/* Sidebar Filters - Desktop */}
 				<div className="hidden md:block w-72 space-y-6">
 					{/* Categories Filter */}
-					<div className="bg-white rounded-lg border p-6">
-						<h2 className="text-lg font-semibold mb-4">Kategori</h2>
+					<div className="bg-white rounded-lg border p-6 shadow-sm">
+						<h2 className="text-lg font-semibold mb-4 text-gray-800 flex items-center gap-2">
+							<span>Kategori</span>
+							<Badge variant="secondary" className="px-2 py-1 text-xs">
+								{categories.length}
+							</Badge>
+						</h2>
+
 						<div className="space-y-2">
-							<Link
-								href={{
-									pathname: "/products",
-									query: {
-										...(search && { search }),
-										...(sort && { sort }),
-										// Don't include category parameter
-										page: 1, // Reset to first page
-									},
-								}}
-								className={`block px-3 py-2 rounded-md transition-colors ${
+							<button
+								onClick={() => handleCategoryClick()}
+								className={`w-full text-left px-4 py-3 rounded-md transition-all flex items-center justify-between ${
 									!category_id
-										? "bg-primary text-white"
-										: "text-gray-600 hover:bg-gray-50"
+										? "bg-primary text-white font-bold"
+										: "text-gray-700 hover:bg-gray-50 hover:text-primary"
 								}`}
 							>
-								Semua Kategori
-							</Link>
+								<span>Semua Kategori</span>
+								{!category_id && <ChevronRight className="h-4 w-4" />}
+							</button>
 							{categories.map((cat: Category) => (
-								<Link
+								<button
 									key={cat.id}
-									href={{
-										pathname: "/products",
-										query: {
-											...(search && { search }),
-											...(sort && { sort }),
-											category_id: cat.id,
-											page: 1, // Reset to first page when changing category
-										},
-									}}
-									className={`block px-3 py-2 rounded-md transition-colors ${
-										category_id === cat.id
-											? "bg-primary text-white"
-											: "text-gray-600 hover:bg-gray-50"
+									onClick={() => handleCategoryClick(cat.id)}
+									className={`w-full text-left px-4 py-3 rounded-md transition-all flex items-center justify-between ${
+										category_id === String(cat.id)
+											? "bg-primary text-white font-bold"
+											: "text-gray-700 hover:bg-gray-50 hover:text-primary"
 									}`}
 								>
-									{cat.name}
-								</Link>
+									<span>{cat.name}</span>
+									{category_id === String(cat.id) && (
+										<ChevronRight className="h-4 w-4" />
+									)}
+								</button>
 							))}
 						</div>
 					</div>
 
 					{/* Sort Options */}
-					<div className="bg-white rounded-lg border p-6">
-						<h2 className="text-lg font-semibold mb-4">Urutkan</h2>
+					<div className="bg-white rounded-lg border p-6 shadow-sm">
+						<h2 className="text-lg font-semibold mb-4 text-gray-800">
+							Urutkan
+						</h2>
 						<div className="space-y-2">
 							{sortOptions.map((option) => (
 								<button
 									key={option.value}
 									onClick={() => handleSort(option.value)}
-									className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+									className={`w-full text-left px-4 py-3 rounded-md transition-colors font-medium ${
 										sort === option.value
-											? "bg-primary text-white"
-											: "text-gray-600 hover:bg-gray-50"
+											? "bg-primary text-white hover:bg-primary/90"
+											: "text-gray-700 hover:bg-gray-100"
 									}`}
 								>
 									{option.label}
@@ -278,7 +283,7 @@ export default function ProductsPage() {
 					{/* Search Bar */}
 					<form
 						onSubmit={handleSearch}
-						className="bg-white rounded-lg border p-4 mb-6"
+						className="bg-white rounded-lg border p-4 mb-6 shadow-sm"
 					>
 						<div className="relative">
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />

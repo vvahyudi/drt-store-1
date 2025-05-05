@@ -161,3 +161,13 @@ export interface Cart {
 	items: CartItem[]
 	total: number
 }
+
+export interface Order {
+	id: string
+	customer_name: string
+	customer_email: string
+	total: number
+	status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+	created_at: string
+	updated_at: string
+}
