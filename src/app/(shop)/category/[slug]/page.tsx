@@ -14,18 +14,18 @@ import {
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 
-type Props = {
+type PageProps = {
 	params: { slug: string }
 	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-async function getCategory(slug: string): Promise<Category> {
+async function getCategory(slug: string): Promise<Category | null> {
 	try {
 		const response = await categoryAPI.getBySlug(slug)
 		return response.data
 	} catch (error) {
 		console.error("Error fetching category:", error)
-		throw error
+		return null
 	}
 }
 
@@ -62,12 +62,13 @@ async function getProducts(
 	}
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
-	let category: Category
+export default async function CategoryPage({
+	params,
+	searchParams,
+}: PageProps) {
+	const category = await getCategory(params.slug)
 
-	try {
-		category = await getCategory(params.slug)
-	} catch (error) {
+	if (!category) {
 		notFound()
 	}
 
