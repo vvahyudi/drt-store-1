@@ -5,18 +5,13 @@ import ProductDetail from "./product-detail"
 import { notFound } from "next/navigation"
 
 interface ProductPageProps {
-	params: {
-		slug: string
-	}
+	params: Promise<{ slug: string }>
 }
 
 async function getProduct(slug: string) {
 	try {
 		const { data: product } = await productAPI.getBySlug(slug)
-		if (!product) {
-			return null
-		}
-		return product
+		return product || null
 	} catch (error) {
 		console.error("Error fetching product:", error)
 		return null
@@ -24,13 +19,10 @@ async function getProduct(slug: string) {
 }
 
 // Generate metadata for SEO
-// Generate metadata for SEO
 export async function generateMetadata(
 	props: ProductPageProps,
 ): Promise<Metadata> {
-	// Access params without destructuring
-	const params = await props.params
-	const slug = params.slug
+	const { slug } = await props.params
 	const product = await getProduct(slug)
 
 	if (!product) {
@@ -52,12 +44,11 @@ export async function generateMetadata(
 }
 
 export default async function ProductPage(props: ProductPageProps) {
-	const params = await props.params
-	const slug = params.slug
+	const { slug } = await props.params
 	const product = await getProduct(slug)
 
 	if (!product) {
-		notFound() // This is correct usage of notFound() [^1]
+		notFound()
 	}
 
 	return <ProductDetail params={{ slug }} initialProduct={product} />
