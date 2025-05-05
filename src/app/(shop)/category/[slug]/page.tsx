@@ -19,13 +19,13 @@ type PageProps = {
 	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-async function getCategory(slug: string) {
+async function getCategory(slug: string): Promise<Category> {
 	try {
 		const response = await categoryAPI.getBySlug(slug)
 		return response.data
 	} catch (error) {
 		console.error("Error fetching category:", error)
-		return null
+		throw error
 	}
 }
 
@@ -66,9 +66,11 @@ export default async function CategoryPage({
 	params,
 	searchParams,
 }: PageProps) {
-	const category = await getCategory(params.slug)
+	let category: Category
 
-	if (!category) {
+	try {
+		category = await getCategory(params.slug)
+	} catch (error) {
 		notFound()
 	}
 
