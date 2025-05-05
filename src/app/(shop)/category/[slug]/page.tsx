@@ -15,8 +15,8 @@ import {
 import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 
 type PageProps = {
-	params: { slug: string }
-	searchParams: { [key: string]: string | string[] | undefined }
+	params: Promise<{ slug: string }>
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 async function getCategory(slug: string): Promise<Category> {
@@ -62,14 +62,14 @@ async function getProducts(
 	}
 }
 
-export default async function CategoryPage({
-	params,
-	searchParams,
-}: PageProps) {
+export default async function CategoryPage(props: PageProps) {
+	const { slug } = await props.params
+	const searchParams = await props.searchParams
+
 	let category: Category
 
 	try {
-		category = await getCategory(params.slug)
+		category = await getCategory(slug)
 	} catch (error) {
 		notFound()
 	}
