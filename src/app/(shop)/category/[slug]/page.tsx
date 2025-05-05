@@ -1,5 +1,6 @@
 // src/app/(shop)/category/[slug]/page.tsx
-import { notFound } from "next/navigation"
+"use client"
+import { notFound, useRouter, useSearchParams } from "next/navigation"
 import { categoryAPI, productAPI } from "@/lib/api"
 import { Category, Product } from "@/types/api"
 import ProductCard from "@/components/products/product-card"
@@ -13,6 +14,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Search } from "lucide-react"
+import { useTransition } from "react"
 
 type PageProps = {
 	params: Promise<{ slug: string }>
@@ -62,41 +64,30 @@ async function getProducts(
 	}
 }
 
-export default async function CategoryPage(props: PageProps) {
-	const { slug } = await props.params
-	const searchParams = await props.searchParams
+// Client component for interactive elements
 
-	let category: Category
+function CategoryControls({
+	initialSort,
+	initialSearch,
+	page,
+	totalPages,
+}: {
+	initialSort?: string
+	initialSearch?: string
+	page: number
+	totalPages: number
+}) {
+	const router = useRouter()
+	const searchParams = useSearchParams()
+	const [isPending, startTransition] = useTransition()
 
-	try {
-		category = await getCategory(slug)
-	} catch (error) {
-		notFound()
+	const updateSearchParams = (key: string, value: string) => {
+		startTransition(() => {
+			const params = new URLSearchParams(searchParams.toString())
+			params.set(key, value)
+			router.push(`?${params.toString()}`)
+		})
 	}
-
-	const page =
-		Number(
-			Array.isArray(searchParams.page)
-				? searchParams.page[0]
-				: searchParams.page,
-		) || 1
-	const sort = Array.isArray(searchParams.sort)
-		? searchParams.sort[0]
-		: searchParams.sort
-	const search = Array.isArray(searchParams.search)
-		? searchParams.search[0]
-		: searchParams.search
-
-	const {
-		data: products,
-		total,
-		total_pages,
-	} = await getProducts(category.id, {
-		page,
-		limit: 12,
-		sort,
-		search,
-	})
 
 	const sortOptions = [
 		{ value: "price.asc", label: "Harga Terendah" },
@@ -105,16 +96,18 @@ export default async function CategoryPage(props: PageProps) {
 	]
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			{/* Category Header */}
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
-				<p className="text-gray-600 mt-2">{category.description}</p>
-			</div>
-
+		<>
 			{/* Search and Sort */}
 			<div className="mb-6 flex flex-col md:flex-row gap-4">
-				<form className="flex-1">
+				<form
+					className="flex-1"
+					onSubmit={(e) => {
+						e.preventDefault()
+						const formData = new FormData(e.currentTarget)
+						const searchValue = formData.get("search") as string
+						updateSearchParams("search", searchValue)
+					}}
+				>
 					<div className="relative">
 						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
 						<Input
@@ -122,18 +115,14 @@ export default async function CategoryPage(props: PageProps) {
 							type="text"
 							placeholder="Cari produk..."
 							className="w-full pl-10 pr-4 py-2"
-							defaultValue={search || ""}
+							defaultValue={initialSearch || ""}
 						/>
 					</div>
 				</form>
 
 				<Select
-					value={sort || ""}
-					onValueChange={(value) => {
-						const params = new URLSearchParams(window.location.search)
-						params.set("sort", value)
-						window.location.search = params.toString()
-					}}
+					value={initialSort || ""}
+					onValueChange={(value) => updateSearchParams("sort", value)}
 				>
 					<SelectTrigger className="w-full md:w-[200px]">
 						<SelectValue placeholder="Urutkan" />
@@ -148,6 +137,84 @@ export default async function CategoryPage(props: PageProps) {
 				</Select>
 			</div>
 
+			{/* Pagination */}
+			{totalPages > 1 && (
+				<div className="mt-8 flex justify-center gap-2">
+					<Button
+						variant="outline"
+						disabled={page <= 1 || isPending}
+						onClick={() => updateSearchParams("page", (page - 1).toString())}
+					>
+						<ChevronLeft className="h-4 w-4" />
+					</Button>
+					{Array.from({ length: totalPages }, (_, i) => i + 1).map(
+						(pageNum) => (
+							<Button
+								key={pageNum}
+								variant={pageNum === page ? "default" : "outline"}
+								disabled={isPending}
+								onClick={() => updateSearchParams("page", pageNum.toString())}
+							>
+								{pageNum}
+							</Button>
+						),
+					)}
+					<Button
+						variant="outline"
+						disabled={page >= totalPages || isPending}
+						onClick={() => updateSearchParams("page", (page + 1).toString())}
+					>
+						<ChevronRight className="h-4 w-4" />
+					</Button>
+				</div>
+			)}
+		</>
+	)
+}
+
+// Server component
+export default async function CategoryPage(props: PageProps) {
+	const { slug } = await props.params
+	const searchParams = await props.searchParams
+
+	let category: Category
+
+	try {
+		category = await getCategory(slug)
+	} catch (error) {
+		notFound()
+	}
+
+	const page = Number(searchParams.page) || 1
+	const sort = searchParams.sort as string | undefined
+	const search = searchParams.search as string | undefined
+
+	const {
+		data: products,
+		total,
+		total_pages,
+	} = await getProducts(category.id, {
+		page,
+		limit: 12,
+		sort,
+		search,
+	})
+
+	return (
+		<div className="container mx-auto px-4 py-8">
+			{/* Category Header */}
+			<div className="mb-8">
+				<h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
+				<p className="text-gray-600 mt-2">{category.description}</p>
+			</div>
+
+			<CategoryControls
+				initialSort={sort}
+				initialSearch={search}
+				page={page}
+				totalPages={total_pages}
+			/>
+
 			{/* Products Grid */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 				{products.map((product: Product) => (
@@ -159,49 +226,6 @@ export default async function CategoryPage(props: PageProps) {
 			{products.length === 0 && (
 				<div className="text-center py-12">
 					<p className="text-gray-600">Tidak ada produk dalam kategori ini.</p>
-				</div>
-			)}
-
-			{/* Pagination */}
-			{total_pages > 1 && (
-				<div className="mt-8 flex justify-center gap-2">
-					<Button
-						variant="outline"
-						disabled={page <= 1}
-						onClick={() => {
-							const params = new URLSearchParams(window.location.search)
-							params.set("page", (page - 1).toString())
-							window.location.search = params.toString()
-						}}
-					>
-						<ChevronLeft className="h-4 w-4" />
-					</Button>
-					{Array.from({ length: total_pages }, (_, i) => i + 1).map(
-						(pageNum) => (
-							<Button
-								key={pageNum}
-								variant={pageNum === page ? "default" : "outline"}
-								onClick={() => {
-									const params = new URLSearchParams(window.location.search)
-									params.set("page", pageNum.toString())
-									window.location.search = params.toString()
-								}}
-							>
-								{pageNum}
-							</Button>
-						),
-					)}
-					<Button
-						variant="outline"
-						disabled={page >= total_pages}
-						onClick={() => {
-							const params = new URLSearchParams(window.location.search)
-							params.set("page", (page + 1).toString())
-							window.location.search = params.toString()
-						}}
-					>
-						<ChevronRight className="h-4 w-4" />
-					</Button>
 				</div>
 			)}
 		</div>
