@@ -3,7 +3,13 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, Heart, Loader2, Check } from "lucide-react"
+import {
+	ShoppingCart,
+	Heart,
+	Loader2,
+	Check,
+	MessageCircle,
+} from "lucide-react"
 import { formatPrice } from "@/lib/utils"
 import { Product } from "@/types/api"
 import { useCart } from "@/hooks/use-cart"
@@ -49,6 +55,22 @@ export default function ProductCard({
 			setIsAddingToCart(false)
 		}
 	}
+	const storePhone = "628175753345"
+
+	const handleWhatsAppCheckout = (e: React.MouseEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		const message = `Halo, saya tertarik dengan produk:\n\n${
+			product.name
+		}\nHarga: ${formatPrice(product.price)}\n\nLink produk: ${
+			window.location.origin
+		}/product/${product.slug}`
+		const encodedMessage = encodeURIComponent(message)
+		const whatsappUrl = `https://wa.me/${storePhone}?text=${encodedMessage}`
+
+		window.open(whatsappUrl, "_blank")
+	}
 
 	const handleImageError = () => {
 		setImageError(true)
@@ -84,7 +106,7 @@ export default function ProductCard({
 								}`}
 								priority={false}
 								quality={85}
-								onLoadingComplete={() => setIsLoading(false)}
+								onLoad={() => setIsLoading(false)}
 								onError={handleImageError}
 							/>
 							{isLoading && (
@@ -139,36 +161,72 @@ export default function ProductCard({
 			</Link>
 
 			{/* Add to Cart Button */}
-			<motion.button
-				onClick={handleAddToCart}
-				disabled={isAddingToCart || alreadyInCart}
-				className={`absolute top-4 right-4 rounded-full p-2 shadow-md transition-all ${
-					alreadyInCart
-						? "bg-green-500 text-white"
-						: "bg-white text-gray-700 hover:bg-primary hover:text-white"
-				} ${isAddingToCart ? "cursor-not-allowed" : ""}`}
-				aria-label={
-					alreadyInCart ? "Sudah di keranjang" : "Tambahkan ke keranjang"
-				}
-				whileHover={{ scale: 1.1 }}
-				whileTap={{ scale: 0.95 }}
-			>
-				{isAddingToCart ? (
-					<Loader2 className="h-5 w-5 animate-spin" />
-				) : alreadyInCart ? (
-					<Check className="h-5 w-5" />
-				) : (
-					<ShoppingCart className="h-5 w-5" />
-				)}
-			</motion.button>
+			<div className="absolute top-4 right-4 group/cart">
+				<motion.button
+					onClick={handleAddToCart}
+					disabled={isAddingToCart || alreadyInCart}
+					className={`rounded-full p-2 shadow-md transition-all ${
+						alreadyInCart
+							? "bg-green-500 text-white"
+							: "bg-white text-gray-700 hover:bg-primary hover:text-white"
+					} ${isAddingToCart ? "cursor-not-allowed" : ""}`}
+					aria-label={
+						alreadyInCart ? "Sudah di keranjang" : "Tambahkan ke keranjang"
+					}
+					whileHover={{ scale: 1.1 }}
+					whileTap={{ scale: 0.95 }}
+				>
+					{isAddingToCart ? (
+						<Loader2 className="h-5 w-5 animate-spin" />
+					) : alreadyInCart ? (
+						<Check className="h-5 w-5" />
+					) : (
+						<ShoppingCart className="h-5 w-5" />
+					)}
+				</motion.button>
+				{/* Desktop Tooltip */}
+				<div className="absolute right-0 top-full mt-2 hidden md:group-hover/cart:block">
+					<div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+						{alreadyInCart ? "Sudah di keranjang" : "Tambahkan ke keranjang"}
+					</div>
+				</div>
+			</div>
+
+			{/* WhatsApp Checkout Button */}
+			<div className="absolute top-4 right-16 group/whatsapp">
+				<motion.button
+					onClick={handleWhatsAppCheckout}
+					className="rounded-full px-3 py-2 shadow-md transition-all bg-white text-gray-700 hover:bg-green-500 hover:text-white flex items-center gap-2"
+					aria-label="Checkout via WhatsApp"
+					whileHover={{ scale: 1.1 }}
+					whileTap={{ scale: 0.95 }}
+				>
+					<span className="text-xs font-medium">Checkout via WhatsApp</span>
+					<MessageCircle className="h-5 w-5" />
+				</motion.button>
+				{/* Desktop Tooltip */}
+				<div className="absolute right-0 top-full mt-2 hidden md:group-hover/whatsapp:block">
+					<div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+						Checkout via WhatsApp
+					</div>
+				</div>
+			</div>
 
 			{/* Wishlist Button */}
-			<button
-				className="absolute top-4 left-4 p-2 rounded-full bg-white text-gray-400 hover:text-red-500 transition-colors"
-				aria-label="Tambahkan ke wishlist"
-			>
-				<Heart className="h-5 w-5" />
-			</button>
+			<div className="absolute top-4 left-4 group/wishlist">
+				<button
+					className="p-2 rounded-full bg-white text-gray-400 hover:text-red-500 transition-colors"
+					aria-label="Tambahkan ke wishlist"
+				>
+					<Heart className="h-5 w-5" />
+				</button>
+				{/* Desktop Tooltip */}
+				<div className="absolute left-0 top-full mt-2 hidden md:group-hover/wishlist:block">
+					<div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+						Tambahkan ke wishlist
+					</div>
+				</div>
+			</div>
 		</motion.div>
 	)
 }
