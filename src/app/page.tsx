@@ -14,6 +14,7 @@ import BenefitsSection from "@/components/sections/benefits-section"
 import TestimonialsSection from "@/components/sections/testimonials-section"
 import CTASection from "@/components/sections/cta-section"
 import SectionHeader from "@/components/sections/section-header"
+import Header from "@/components/layout/header"
 
 async function getFeaturedProducts() {
 	try {
@@ -62,6 +63,7 @@ export default async function HomePage() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
+			<Header />
 			{/* Hero Section */}
 			<HeroSection
 				title="Temukan Produk Berkualitas untuk"
