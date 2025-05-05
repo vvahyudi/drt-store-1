@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
 	ShoppingBag,
 	ArrowRight,
@@ -102,8 +102,7 @@ function ProductsError({ error }: { error: Error }) {
 // This component handles search params
 function ProductsContent() {
 	const router = useRouter()
-	// useSearchParams is now used inside a component wrapped by Suspense
-	const searchParams = new URLSearchParams(window.location.search)
+	const searchParams = useSearchParams()
 	const [isLoading, setIsLoading] = useState(true)
 	const [products, setProducts] = useState<Product[]>([])
 	const [categories, setCategories] = useState<Category[]>([])
