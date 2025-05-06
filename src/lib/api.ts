@@ -12,6 +12,7 @@ import {
 	RefreshTokenResponse,
 	ProductQueryParams,
 } from "@/types/api"
+import { getSession } from "next-auth/react"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
 
@@ -28,9 +29,9 @@ api.interceptors.request.use(
 	async (config) => {
 		// For browser environments only
 		if (typeof window !== "undefined") {
-			const token = localStorage.getItem("token")
-			if (token) {
-				config.headers.Authorization = `Bearer ${token}`
+			const session = await getSession()
+			if (session?.user?.accessToken) {
+				config.headers.Authorization = `Bearer ${session.user.accessToken}`
 			}
 		}
 		return config
