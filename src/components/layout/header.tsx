@@ -153,14 +153,16 @@ const Header = () => {
 							<div className="relative group">
 								<button className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors">
 									<div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
-										{session.user?.name?.charAt(0).toUpperCase()}
+										{session.user?.username?.charAt(0).toUpperCase()}
 									</div>
 								</button>
 								<div className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-lg py-1 hidden group-hover:block border border-gray-100">
 									<div className="px-4 py-3 border-b">
-										<p className="text-sm font-medium">{session.user.name}</p>
+										<p className="text-sm font-medium">
+											{session.user.username}
+										</p>
 										<p className="text-xs text-gray-500">
-											{session.user.email}
+											{session.user.username}
 										</p>
 									</div>
 									{!isAdmin && (
