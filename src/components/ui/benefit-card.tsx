@@ -1,28 +1,28 @@
-// src/components/ui/benefit-card.tsx
-import { LucideIcon } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 interface BenefitCardProps {
 	icon: LucideIcon
 	title: string
 	description: string
-	iconBgColor?: string
-	iconColor?: string
 }
 
 export default function BenefitCard({
 	icon: Icon,
 	title,
 	description,
-	iconBgColor = "bg-blue-50",
-	iconColor = "text-primary",
 }: BenefitCardProps) {
 	return (
-		<div className="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-shadow">
-			<div className={`${iconBgColor} p-3 rounded-full inline-block mb-4`}>
-				<Icon className={`h-8 w-8 ${iconColor}`} />
-			</div>
-			<h3 className="text-lg font-bold mb-2">{title}</h3>
-			<p className="text-gray-600">{description}</p>
-		</div>
+		<Card className="h-full shadow-lg border-none bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+			<CardHeader className="pb-2">
+				<div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+					<Icon className="h-6 w-6 text-primary" />
+				</div>
+				<h3 className="text-xl font-bold text-gray-900">{title}</h3>
+			</CardHeader>
+			<CardContent>
+				<p className="text-gray-600">{description}</p>
+			</CardContent>
+		</Card>
 	)
 }

@@ -53,17 +53,17 @@ const Header = () => {
 	}
 
 	const navLinks = [
-		{ href: "/", label: "Home", icon: Home },
-		{ href: "/products", label: "Products", icon: Package },
-		{ href: "/categories", label: "Categories", icon: Tag },
+		{ href: "/", label: "Beranda", icon: Home },
+		{ href: "/products", label: "Produk", icon: Package },
+		{ href: "/categories", label: "Kategori", icon: Tag },
 	]
 
 	const adminLinks = [
-		{ href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-		{ href: "/admin/products", label: "Products", icon: Package },
-		{ href: "/admin/categories", label: "Categories", icon: Tag },
-		{ href: "/admin/orders", label: "Orders", icon: ShoppingBag },
-		{ href: "/admin/settings", label: "Settings", icon: Settings },
+		{ href: "/admin/dashboard", label: "Dasbor", icon: LayoutDashboard },
+		{ href: "/admin/products", label: "Produk", icon: Package },
+		{ href: "/admin/categories", label: "Kategori", icon: Tag },
+		{ href: "/admin/orders", label: "Pesanan", icon: ShoppingBag },
+		{ href: "/admin/settings", label: "Pengaturan", icon: Settings },
 	]
 
 	const activeLinks = isAdmin ? adminLinks : navLinks
@@ -127,7 +127,7 @@ const Header = () => {
 								<form onSubmit={handleSearch} className="relative">
 									<input
 										type="text"
-										placeholder="Search products..."
+										placeholder="Cari produk..."
 										className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all w-64"
 										value={searchQuery}
 										onChange={(e) => setSearchQuery(e.target.value)}
@@ -171,7 +171,7 @@ const Header = () => {
 											className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
 										>
 											<LayoutDashboard className="w-4 h-4" />
-											Admin Dashboard
+											Dasbor Admin
 										</Link>
 									)}
 									<button
@@ -179,7 +179,7 @@ const Header = () => {
 										className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
 									>
 										<LogOut className="w-4 h-4" />
-										Sign Out
+										Keluar
 									</button>
 								</div>
 							</div>
@@ -230,7 +230,7 @@ const Header = () => {
 								<div className="relative">
 									<input
 										type="text"
-										placeholder="Search products..."
+										placeholder="Cari produk..."
 										className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
 										value={searchQuery}
 										onChange={(e) => setSearchQuery(e.target.value)}
@@ -270,7 +270,7 @@ const Header = () => {
 												onClick={() => setIsMenuOpen(false)}
 											>
 												<LayoutDashboard className="w-5 h-5" />
-												Admin Dashboard
+												Dasbor Admin
 											</Link>
 										)}
 										<button
@@ -281,7 +281,7 @@ const Header = () => {
 											className="flex items-center gap-3 text-sm font-medium py-3 px-4 rounded-lg text-red-600 hover:bg-gray-50 transition-colors"
 										>
 											<LogOut className="w-5 h-5" />
-											Sign Out
+											Keluar
 										</button>
 									</>
 								)}

@@ -21,11 +21,11 @@
 	}
 
 	main {
-		@apply flex-1 container mx-auto px-4 py-8 max-w-7xl;
+		@apply flex-1 container mx-auto px-4 py-8;
 	}
 
 	.container {
-		@apply mx-auto px-4 max-w-7xl;
+		@apply mx-auto px-4;
 	}
 }
 
@@ -154,4 +154,13 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }

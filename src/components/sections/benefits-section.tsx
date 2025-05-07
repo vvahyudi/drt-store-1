@@ -1,6 +1,6 @@
-// src/components/sections/benefits-section.tsx
+"use client"
+
 import { memo } from "react"
-import dynamic from "next/dynamic"
 import {
 	ShieldCheck,
 	Truck,
@@ -10,11 +10,9 @@ import {
 	CreditCard,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-
-// Lazy load BenefitCard to improve initial load performance
-const BenefitCard = dynamic(() => import("../ui/benefit-card"), {
-	loading: () => <div className="h-48 bg-gray-100 rounded-lg animate-pulse" />,
-})
+import CardStack from "@/components/ui/card-stack"
+import BenefitCard from "@/components/ui/benefit-card"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface Benefit {
 	icon: LucideIcon
@@ -62,28 +60,36 @@ const benefits: Benefit[] = [
 ]
 
 function BenefitsSection() {
+	const isDesktop = useMediaQuery("(min-width: 1024px)")
+
+	const benefitCards = benefits.map((benefit, index) => (
+		<BenefitCard
+			key={`benefit-${index}`}
+			icon={benefit.icon}
+			title={benefit.title}
+			description={benefit.description}
+		/>
+	))
+
 	return (
 		<section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-			<div className="container px-4 mx-auto max-w-7xl">
+			<div className="px-4 mx-auto">
 				<div className="text-center mb-12">
 					<h2 className="text-3xl md:text-4xl font-bold text-gray-900">
 						Mengapa Memilih DRT-Store?
 					</h2>
-					<p className="text-gray-600 mt-3 max-w-2xl mx-auto text-lg">
+					<p className="text-gray-600 mt-3 mx-auto text-lg">
 						Kami berkomitmen memberikan pengalaman belanja terbaik
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-					{benefits.map((benefit, index) => (
-						<BenefitCard
-							key={`benefit-${index}`}
-							icon={benefit.icon}
-							title={benefit.title}
-							description={benefit.description}
-						/>
-					))}
-				</div>
+				{isDesktop ? (
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+						{benefitCards}
+					</div>
+				) : (
+					<CardStack items={benefitCards} />
+				)}
 			</div>
 		</section>
 	)

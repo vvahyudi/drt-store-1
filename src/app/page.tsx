@@ -79,7 +79,7 @@ export default async function HomePage() {
 
 			{/* Category Showcase */}
 			<section className="py-12 bg-gray-50">
-				<div className="container">
+				<div className="px-4 mx-auto">
 					<SectionHeader
 						title="Kategori Unggulan"
 						description="Temukan produk berdasarkan kategori kebutuhan Anda"
@@ -124,7 +124,7 @@ export default async function HomePage() {
 
 			{/* Featured Products */}
 			<section className="py-12 bg-white">
-				<div className="container">
+				<div className="px-4 mx-auto">
 					<SectionHeader
 						title="Produk Unggulan"
 						description="Produk terbaik dan paling diminati"
@@ -172,7 +172,7 @@ export default async function HomePage() {
 
 			{/* New Arrivals */}
 			<section className="py-12 bg-gray-50">
-				<div className="container">
+				<div className="px-4 mx-auto">
 					<SectionHeader
 						title="Produk Terbaru"
 						description="Koleksi terbaru yang baru saja ditambahkan"

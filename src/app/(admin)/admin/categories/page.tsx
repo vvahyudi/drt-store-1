@@ -62,16 +62,16 @@ export default function CategoriesPage() {
 
 	const handleDelete = useCallback(
 		async (id: string) => {
-			if (!confirm("Are you sure you want to delete this category?")) return
+			if (!confirm("Apakah Anda yakin ingin menghapus kategori ini?")) return
 
 			try {
 				await categoryAPI.delete(id)
-				toast.success("Category deleted successfully")
+				toast.success("Kategori berhasil dihapus")
 				fetchCategories()
 			} catch (err) {
-				toast.error("Failed to delete category")
+				toast.error("Gagal menghapus kategori")
 				setError(
-					err instanceof Error ? err : new Error("Failed to delete category"),
+					err instanceof Error ? err : new Error("Gagal menghapus kategori"),
 				)
 			}
 		},
@@ -93,10 +93,10 @@ export default function CategoriesPage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="text-center py-12">
 					<h2 className="text-2xl font-semibold text-red-600 mb-4">
-						Something went wrong
+						Terjadi Kesalahan
 					</h2>
 					<p className="text-gray-600 mb-6">{error.message}</p>
-					<Button onClick={fetchCategories}>Try Again</Button>
+					<Button onClick={fetchCategories}>Coba Lagi</Button>
 				</div>
 			</div>
 		)
@@ -106,7 +106,7 @@ export default function CategoriesPage() {
 		<>
 			<Header />
 			<div className="container mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold text-gray-900 mb-8">Categories</h1>
+				<h1 className="text-3xl font-bold text-gray-900 mb-8">Kategori</h1>
 
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
 					<div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -114,7 +114,7 @@ export default function CategoriesPage() {
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
 							<Input
 								type="text"
-								placeholder="Search categories..."
+								placeholder="Cari kategori..."
 								className="pl-10"
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
@@ -126,7 +126,7 @@ export default function CategoriesPage() {
 							className="w-full sm:w-auto"
 						>
 							<Plus className="h-4 w-4 mr-2" />
-							Add Category
+							Tambah Kategori
 						</Button>
 					</div>
 				</div>
@@ -142,11 +142,11 @@ export default function CategoriesPage() {
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>Name</TableHead>
+									<TableHead>Nama</TableHead>
 									<TableHead className="hidden md:table-cell">
-										Description
+										Deskripsi
 									</TableHead>
-									<TableHead className="text-right">Actions</TableHead>
+									<TableHead className="text-right">Aksi</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -157,7 +157,7 @@ export default function CategoriesPage() {
 												{category.name}
 											</TableCell>
 											<TableCell className="hidden md:table-cell">
-												{category.description || "No description"}
+												{category.description || "Tidak ada deskripsi"}
 											</TableCell>
 											<TableCell className="text-right space-x-1">
 												<Button
@@ -182,7 +182,7 @@ export default function CategoriesPage() {
 								) : (
 									<TableRow>
 										<TableCell colSpan={3} className="text-center py-8">
-											No categories found
+											Tidak ada kategori ditemukan
 										</TableCell>
 									</TableRow>
 								)}
@@ -195,7 +195,7 @@ export default function CategoriesPage() {
 					<DialogContent className="max-h-[90vh] overflow-y-auto">
 						<DialogHeader>
 							<DialogTitle>
-								{selectedItem ? "Edit" : "Add New"} Category
+								{selectedItem ? "Edit" : "Tambah"} Kategori
 							</DialogTitle>
 						</DialogHeader>
 						<Suspense

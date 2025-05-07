@@ -148,15 +148,15 @@ export default function ProductForm({
 
 			if (product) {
 				await productAPI.update(product.id, formData)
-				toast.success("Product updated successfully")
+				toast.success("Produk berhasil diperbarui")
 			} else {
 				await productAPI.create(formData)
-				toast.success("Product created successfully")
+				toast.success("Produk berhasil dibuat")
 			}
 
 			onSuccess()
 		} catch (err) {
-			toast.error("Failed to save product")
+			toast.error("Gagal menyimpan produk")
 			console.error(err)
 		} finally {
 			setIsLoading(false)
@@ -166,11 +166,11 @@ export default function ProductForm({
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div>
-				<Label htmlFor="name">Name</Label>
+				<Label htmlFor="name">Nama</Label>
 				<Input id="name" name="name" defaultValue={product?.name} required />
 			</div>
 			<div>
-				<Label htmlFor="description">Description</Label>
+				<Label htmlFor="description">Deskripsi</Label>
 				<Textarea
 					id="description"
 					name="description"
@@ -179,7 +179,7 @@ export default function ProductForm({
 				/>
 			</div>
 			<div>
-				<Label htmlFor="price">Price (IDR)</Label>
+				<Label htmlFor="price">Harga (IDR)</Label>
 				<Input
 					id="price"
 					name="price"
@@ -192,7 +192,7 @@ export default function ProductForm({
 				/>
 			</div>
 			<div>
-				<Label htmlFor="category_id">Category</Label>
+				<Label htmlFor="category_id">Kategori</Label>
 				<Select
 					value={selectedCategory}
 					onValueChange={setSelectedCategory}
@@ -203,18 +203,16 @@ export default function ProductForm({
 					<SelectTrigger id="category_id">
 						<SelectValue
 							placeholder={
-								isLoadingCategories
-									? "Loading categories..."
-									: "Select category"
+								isLoadingCategories ? "Memuat kategori..." : "Pilih kategori"
 							}
 						>
-							{selectedCategoryData?.data?.name || "Select category"}
+							{selectedCategoryData?.data?.name || "Pilih kategori"}
 						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
 						{isLoadingCategories ? (
 							<SelectItem value="loading" disabled>
-								Loading categories...
+								Memuat kategori...
 							</SelectItem>
 						) : categories && categories.length > 0 ? (
 							categories.map((category) => (
@@ -224,14 +222,14 @@ export default function ProductForm({
 							))
 						) : (
 							<SelectItem value="no-categories" disabled>
-								No categories available
+								Tidak ada kategori tersedia
 							</SelectItem>
 						)}
 					</SelectContent>
 				</Select>
 			</div>
 			<div>
-				<Label htmlFor="stock">Stock</Label>
+				<Label htmlFor="stock">Stok</Label>
 				<Input
 					id="stock"
 					name="stock"
@@ -244,7 +242,7 @@ export default function ProductForm({
 
 			{/* Image Upload Section */}
 			<div className="space-y-2">
-				<Label>Product Images</Label>
+				<Label>Gambar Produk</Label>
 				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
 					{previewUrls.map((url, index) => (
 						<div key={index} className="relative group">

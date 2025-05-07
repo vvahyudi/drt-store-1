@@ -113,6 +113,8 @@ export interface ProductQueryParams {
 	sort?: string
 	search?: string
 	category_id?: string
+	min_price?: number
+	max_price?: number
 }
 
 export interface ProductDetails {

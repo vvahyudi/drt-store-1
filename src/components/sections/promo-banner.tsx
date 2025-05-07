@@ -61,7 +61,7 @@ function PromoBanner({
 
 	return (
 		<section className={cn("py-16", styles.section, className)}>
-			<div className="container px-4 mx-auto max-w-7xl">
+			<div className=" px-4 mx-auto">
 				<div className="flex flex-col lg:flex-row items-center gap-8">
 					<div className="lg:w-1/2 space-y-4">
 						<h2 className="text-3xl md:text-4xl font-bold leading-tight">

@@ -19,35 +19,35 @@ import { signOut } from "next-auth/react"
 
 const sidebarLinks = [
 	{
-		label: "Dashboard",
+		label: "Dasbor",
 		href: "/admin/dashboard",
 		icon: LayoutDashboard,
 	},
 	{
-		label: "Products",
+		label: "Produk",
 		href: "/admin/products",
 		icon: ShoppingBag,
 		subLinks: [
-			{ label: "All Products", href: "/admin/products" },
-			{ label: "Add Product", href: "/admin/products/create" },
+			{ label: "Semua Produk", href: "/admin/products" },
+			{ label: "Tambah Produk", href: "/admin/products/create" },
 		],
 	},
 	{
-		label: "Categories",
+		label: "Kategori",
 		href: "/admin/categories",
 		icon: FolderTree,
 		subLinks: [
-			{ label: "All Categories", href: "/admin/categories" },
-			{ label: "Add Category", href: "/admin/categories/create" },
+			{ label: "Semua Kategori", href: "/admin/categories" },
+			{ label: "Tambah Kategori", href: "/admin/categories/create" },
 		],
 	},
 	{
-		label: "Orders",
+		label: "Pesanan",
 		href: "/admin/orders",
 		icon: ShoppingCart,
 	},
 	{
-		label: "Settings",
+		label: "Pengaturan",
 		href: "/admin/settings",
 		icon: Settings,
 	},
@@ -150,7 +150,7 @@ export default function Sidebar() {
 					className="flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-gray-100 w-full"
 				>
 					<LogOut className="w-5 h-5 mr-3" />
-					Sign Out
+					Keluar
 				</button>
 			</div>
 		</div>

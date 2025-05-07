@@ -204,7 +204,7 @@ function ProductsContent() {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-8">
+		<div className=" mx-auto px-4 py-8">
 			{/* Mobile Filters Button */}
 			<div className="md:hidden mb-4">
 				<Button variant="outline" className="w-full">

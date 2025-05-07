@@ -25,7 +25,7 @@ export default function CategoryShowcase({
 
 	return (
 		<section className="py-12 bg-white">
-			<div className="container px-4 mx-auto">
+			<div className=" px-4 mx-auto">
 				<div className="text-center mb-8">
 					<h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
 					{description && <p className="text-gray-600 mt-2">{description}</p>}

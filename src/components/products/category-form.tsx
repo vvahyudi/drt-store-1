@@ -34,14 +34,14 @@ export default function CategoryForm({
 		try {
 			if (category) {
 				await categoryAPI.update(category.id, formData)
-				toast.success("Category updated successfully")
+				toast.success("Kategori berhasil diperbarui")
 			} else {
 				await categoryAPI.create(formData)
-				toast.success("Category created successfully")
+				toast.success("Kategori berhasil dibuat")
 			}
 			onSuccess()
 		} catch (error) {
-			toast.error("Failed to save category")
+			toast.error("Gagal menyimpan kategori")
 			console.error("Error saving category:", error)
 		} finally {
 			setIsLoading(false)
@@ -52,7 +52,7 @@ export default function CategoryForm({
 		<form onSubmit={handleSubmit} className="space-y-6">
 			<div className="space-y-4">
 				<div>
-					<Label htmlFor="name">Name</Label>
+					<Label htmlFor="name">Nama</Label>
 					<Input
 						id="name"
 						value={formData.name}
@@ -62,7 +62,7 @@ export default function CategoryForm({
 				</div>
 
 				<div>
-					<Label htmlFor="description">Description</Label>
+					<Label htmlFor="description">Deskripsi</Label>
 					<Textarea
 						id="description"
 						value={formData.description}
@@ -75,11 +75,11 @@ export default function CategoryForm({
 
 			<div className="flex justify-end gap-3 pt-4">
 				<Button type="button" variant="outline" onClick={onCancel}>
-					Cancel
+					Batal
 				</Button>
 				<Button type="submit" disabled={isLoading}>
 					{isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-					{category ? "Update Category" : "Add Category"}
+					{category ? "Perbarui Kategori" : "Tambah Kategori"}
 				</Button>
 			</div>
 		</form>

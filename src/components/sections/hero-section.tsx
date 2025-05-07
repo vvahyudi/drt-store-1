@@ -42,7 +42,7 @@ export default function HeroSection({
 				className,
 			)}
 		>
-			<div className="container px-4 mx-auto">
+			<div className=" px-4 mx-auto">
 				<div
 					className={cn(
 						"flex flex-col gap-8",

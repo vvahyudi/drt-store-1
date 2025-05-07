@@ -14,7 +14,7 @@ import {
 	RefreshCw,
 } from "lucide-react"
 import { toast } from "sonner"
-import ProductImageGallery from "@/components/products/product-image-gallery"
+// import ProductImageGallery from "@/components/products/product-image-gallery"
 import ProductDetailContent from "./product-detail-content"
 
 interface ProductDetailProps {

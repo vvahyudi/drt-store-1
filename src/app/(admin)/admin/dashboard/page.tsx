@@ -71,10 +71,10 @@ export default function DashboardPage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="text-center py-12">
 					<h2 className="text-2xl font-semibold text-red-600 mb-4">
-						Something went wrong
+						Terjadi Kesalahan
 					</h2>
 					<p className="text-gray-600 mb-6">{error.message}</p>
-					<Button onClick={() => window.location.reload()}>Try Again</Button>
+					<Button onClick={() => window.location.reload()}>Coba Lagi</Button>
 				</div>
 			</div>
 		)
@@ -85,18 +85,18 @@ export default function DashboardPage() {
 			<Header />
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Dasbor</h1>
 					<div className="flex gap-4">
 						<Button asChild>
 							<Link href="/admin/products">
 								<Package className="h-4 w-4 mr-2" />
-								Manage Products
+								Kelola Produk
 							</Link>
 						</Button>
 						<Button asChild variant="outline">
 							<Link href="/admin/categories">
 								<Tag className="h-4 w-4 mr-2" />
-								Manage Categories
+								Kelola Kategori
 							</Link>
 						</Button>
 					</div>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
 							<Card>
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle className="text-sm font-medium">
-										Total Products
+										Total Produk
 									</CardTitle>
 									<Package className="h-4 w-4 text-muted-foreground" />
 								</CardHeader>
@@ -124,7 +124,7 @@ export default function DashboardPage() {
 										{stats.totalProducts}
 									</div>
 									<p className="text-xs text-muted-foreground">
-										Active products in inventory
+										Produk aktif dalam inventori
 									</p>
 								</CardContent>
 							</Card>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
 							<Card>
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle className="text-sm font-medium">
-										Total Categories
+										Total Kategori
 									</CardTitle>
 									<Tag className="h-4 w-4 text-muted-foreground" />
 								</CardHeader>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
 										{stats.totalCategories}
 									</div>
 									<p className="text-xs text-muted-foreground">
-										Product categories
+										Kategori produk
 									</p>
 								</CardContent>
 							</Card>
@@ -149,7 +149,7 @@ export default function DashboardPage() {
 							<Card>
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle className="text-sm font-medium">
-										Inventory Value
+										Nilai Inventori
 									</CardTitle>
 									<ArrowUpRight className="h-4 w-4 text-muted-foreground" />
 								</CardHeader>
@@ -158,7 +158,7 @@ export default function DashboardPage() {
 										{formatCurrency(stats.totalValue)}
 									</div>
 									<p className="text-xs text-muted-foreground">
-										Total value of inventory
+										Total nilai inventori
 									</p>
 								</CardContent>
 							</Card>
@@ -166,7 +166,7 @@ export default function DashboardPage() {
 							<Card>
 								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle className="text-sm font-medium">
-										Low Stock Items
+										Stok Menipis
 									</CardTitle>
 									<ArrowDownRight className="h-4 w-4 text-muted-foreground" />
 								</CardHeader>
@@ -175,7 +175,7 @@ export default function DashboardPage() {
 										{stats.lowStockItems}
 									</div>
 									<p className="text-xs text-muted-foreground">
-										Items with stock below 10
+										Item dengan stok di bawah 10
 									</p>
 								</CardContent>
 							</Card>
@@ -186,7 +186,7 @@ export default function DashboardPage() {
 				<div className="mt-8 grid gap-4 md:grid-cols-2">
 					<Card>
 						<CardHeader>
-							<CardTitle>Recent Products</CardTitle>
+							<CardTitle>Produk Terbaru</CardTitle>
 						</CardHeader>
 						<CardContent>
 							{isLoading ? (
@@ -205,7 +205,7 @@ export default function DashboardPage() {
 											<div>
 												<p className="font-medium">{product.name}</p>
 												<p className="text-sm text-muted-foreground">
-													{formatCurrency(product.price)} • Stock:{" "}
+													{formatCurrency(product.price)} • Stok:{" "}
 													{product.stock}
 												</p>
 											</div>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Categories Overview</CardTitle>
+							<CardTitle>Ringkasan Kategori</CardTitle>
 						</CardHeader>
 						<CardContent>
 							{isLoading ? (
@@ -247,7 +247,7 @@ export default function DashboardPage() {
 															(p) => p.category_id === category.id,
 														).length
 													}{" "}
-													products
+													produk
 												</p>
 											</div>
 											<Button variant="ghost" size="sm" asChild>

@@ -48,12 +48,12 @@ function CTASection({
 
 	return (
 		<section className={cn("py-16 md:py-20", styles.section, className)}>
-			<div className="container px-4 mx-auto max-w-5xl text-center">
+			<div className="px-4 mx-auto text-center">
 				<div className="space-y-6">
 					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
 						{title}
 					</h2>
-					<p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
+					<p className="text-lg md:text-xl text-white/90 px-20 mx-auto">
 						{description}
 					</p>
 					<div>
