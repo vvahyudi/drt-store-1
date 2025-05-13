@@ -114,7 +114,11 @@ export const categoryAPI = {
 		api.post("/category", categoryData),
 
 	update: (id: string, categoryData: any): Promise<ApiResponse<Category>> =>
-		api.patch(`/category/${id}`, categoryData),
+		api.patch(`/category/${id}`, categoryData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}),
 
 	delete: (id: string): Promise<ApiResponse<void>> =>
 		api.delete(`/category/${id}`),
