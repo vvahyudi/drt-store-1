@@ -162,3 +162,31 @@ export const authAPI = {
 		}
 	},
 }
+
+async function getFeaturedProducts() {
+	try {
+		const response = await productAPI.getAll({
+			limit: 8,
+			sort: "is_featured.desc",
+			includeDeleted: false, // Explicitly exclude deleted products
+		})
+		return response.data || []
+	} catch (error) {
+		console.error("Error fetching featured products:", error)
+		return []
+	}
+}
+
+async function getNewArrivals() {
+	try {
+		const response = await productAPI.getAll({
+			limit: 8,
+			sort: "created_at.desc",
+			includeDeleted: false, // Explicitly exclude deleted products
+		})
+		return response.data || []
+	} catch (error) {
+		console.error("Error fetching new arrivals:", error)
+		return []
+	}
+}
